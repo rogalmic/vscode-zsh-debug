@@ -150,7 +150,7 @@ export class ZshDebugSession extends LoggingDebugSession {
 		.replace("\r", ""),
 		this.launchArgs.pathZsh)
 
-		this.proxyProcess.stdin.write(`examine Debug environment: zsh_ver=$BASH_VERSION, zshdb_ver=$_Dbg_release, program=$0, args=$*\nprint "$PPID"\nhandle INT stop\nprint '${ZshDebugSession.END_MARKER}'\n`);
+		this.proxyProcess.stdin.write(`examine Debug environment: zsh_ver=$ZSH_VERSION, zshdb_ver=$_Dbg_release, program=$0, args=$*\nprint "$PPID"\nhandle INT stop\nprint '${ZshDebugSession.END_MARKER}'\n`);
 
 		const currentShell  = (process.platform === "win32") ? getWSLLauncherPath(true) : args.pathZsh;
 		const optionalZshPathArgument = (currentShell !== args.pathZsh) ? args.pathZsh : "";
@@ -160,7 +160,7 @@ export class ZshDebugSession extends LoggingDebugSession {
 			cwd: ".",
 			args: [currentShell, optionalZshPathArgument, `-c`,
 			`cd "${args.cwdEffective}"; while [[ ! -p "${fifo_path}" ]]; do sleep 0.25; done
-			"${args.pathZsh}" "${args.pathZshdb}" --quiet --tty "${fifo_path}" --tty_in "${fifo_path}_in" --library "${args.pathZshdbLib}" -- "${args.programEffective}" ${args.args.map(e => `"` + e.replace(`"`,`\\\"`) + `"`).join(` `)}`
+			"${args.pathZsh}" -f "${args.pathZshdb}" --quiet --tty "${fifo_path}" --tty_in "${fifo_path}_in" --library "${args.pathZshdbLib}" -- "${args.programEffective}" ${args.args.map(e => `"` + e.replace(`"`,`\\\"`) + `"`).join(` `)}`
 			.replace("\r", "").replace("\n", "; ")
 			].filter(arg => arg !== ""),
 		};
