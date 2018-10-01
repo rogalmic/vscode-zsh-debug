@@ -78,11 +78,11 @@ export function getWSLLauncherPath(useInShell: boolean): string {
 }
 
 /**
- * @example <caption>Escape whitespace for setting bashdb arguments with spaces</caption>
- * escapeCharactersInBashdbArg("/pa th/to/script.sh");
+ * @example <caption>Escape whitespace for setting zshdb arguments with spaces</caption>
+ * escapeCharactersInZshdbArg("/pa th/to/script.sh");
  * // => "/pa\\\\040th/to/script.sh"
  */
-export function escapeCharactersInBashdbArg(path: string): string {
+export function escapeCharactersInZshdbArg(path: string): string {
 	return path.replace(/\s/g, (m) => "\\\\" + ("0000" + m.charCodeAt(0).toString(8)).slice(-4));
 }
 

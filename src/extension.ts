@@ -5,16 +5,16 @@ import { normalize, join } from 'path';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	context.subscriptions.push(vscode.commands.registerCommand('extension.bash-debug.getProgramName', _config => {
+	context.subscriptions.push(vscode.commands.registerCommand('extension.zsh-debug.getProgramName', _config => {
 		// Invoked if any property in client's launch.json has ${command:AskForScriptName} (mapped to getProgramName
 		// in package.json) in its value.
 		return vscode.window.showInputBox({
-			placeHolder: "Type absolute path to bash script.",
+			placeHolder: "Type absolute path to zsh script.",
 			value: (process.platform === "win32") ? "{workspaceFolder}\\path\\to\\script.sh" : "{workspaceFolder}/path/to/script.sh"
 		}).then(v => expandPath(v, vscode.workspace.rootPath));
 	}));
 
-	context.subscriptions.push(vscode.commands.registerCommand('extension.bash-debug.selectProgramName', _config => {
+	context.subscriptions.push(vscode.commands.registerCommand('extension.zsh-debug.selectProgramName', _config => {
 		// Invoked if any property in client's launch.json has ${command:SelectScriptName} (mapped to selectProgramName
 		// in package.json) in its value.
 		return vscode.workspace.findFiles("**/*.sh", "").then((uris) => {
@@ -31,14 +31,14 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
-	context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('bashdb', new BashConfigurationProvider()));
+	context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('zshdb', new ZshConfigurationProvider()));
 }
 
 export function deactivate() {
 	// nothing to do
 }
 
-class BashConfigurationProvider implements vscode.DebugConfigurationProvider {
+class ZshConfigurationProvider implements vscode.DebugConfigurationProvider {
 	/**
 	 * Check configuration just before a debug session is being launched.
 	 */
@@ -55,8 +55,8 @@ class BashConfigurationProvider implements vscode.DebugConfigurationProvider {
 
 		// Else launch.json exists
 		if (!config.type || !config.name) {
-			let msg = "BUG in Bash Debug: reached to unreachable code.";
-			msg += "\nIf it is reproducible, please report this bug on: https://github.com/rogalmic/vscode-bash-debug/issues";
+			let msg = "BUG in Zsh Debug: reached to unreachable code.";
+			msg += "\nIf it is reproducible, please report this bug on: https://github.com/rogalmic/vscode-zsh-debug/issues";
 			msg += "\nYou can avoid this bug by setting \"type\" and \"name\" attributes in launch.json.";
 			return vscode.window.showErrorMessage(msg).then(_ => { return undefined; });
 		}
@@ -66,11 +66,11 @@ class BashConfigurationProvider implements vscode.DebugConfigurationProvider {
 		}
 
 		// Abort launch if any deprecated argument is included
-		if (config.bashDbPath) {
-			return vscode.window.showErrorMessage("`bashDbPath` is deprecated. Use `pathBashdb` instead.").then(_ => { return undefined; });
+		if (config.zshDbPath) {
+			return vscode.window.showErrorMessage("`zshDbPath` is deprecated. Use `pathZshdb` instead.").then(_ => { return undefined; });
 		}
-		if (config.bashPath) {
-			return vscode.window.showErrorMessage("`bashPath` is deprecated. Use `pathBash` instead.").then(_ => { return undefined; });
+		if (config.zshPath) {
+			return vscode.window.showErrorMessage("`zshPath` is deprecated. Use `pathZsh` instead.").then(_ => { return undefined; });
 		}
 		if (config.commandLineArguments) {
 			return vscode.window.showErrorMessage("`commandLineArguments` is deprecated. Use `args` instead.").then(_ => { return undefined; });
@@ -84,26 +84,26 @@ class BashConfigurationProvider implements vscode.DebugConfigurationProvider {
 			return vscode.window.showErrorMessage("Please specify \"program\" in launch.json.").then(_ => { return undefined; });
 		}
 
-		// Fill non-"required" attributes with default values to prevent bashdb (or other programs) from panic
+		// Fill non-"required" attributes with default values to prevent zshdb (or other programs) from panic
 		if (!config.args) { config.args = [] }
 		if (!config.cwd) { config.cwd = folder.uri.fsPath }
-		if (!config.pathBash) {
-			config.pathBash = "bash"
+		if (!config.pathZsh) {
+			config.pathZsh = "zsh"
 		}
-		if (!config.pathBashdb) {
+		if (!config.pathZshdb) {
 			if (process.platform === "win32") {
-				config.pathBashdb = getWSLPath(normalize(join(__dirname, "..", "bashdb_dir", "bashdb")));
+				config.pathZshdb = getWSLPath(normalize(join(__dirname, "..", "zshdb_dir", "zshdb")));
 			}
 			else {
-				config.pathBashdb = normalize(join(__dirname, "..", "bashdb_dir", "bashdb"));
+				config.pathZshdb = normalize(join(__dirname, "..", "zshdb_dir", "zshdb"));
 			}
 		}
-		if (!config.pathBashdbLib) {
+		if (!config.pathZshdbLib) {
 			if (process.platform === "win32") {
-				config.pathBashdbLib = getWSLPath(normalize(join(__dirname, "..", "bashdb_dir")));
+				config.pathZshdbLib = getWSLPath(normalize(join(__dirname, "..", "zshdb_dir")));
 			}
 			else {
-				config.pathBashdbLib = normalize(join(__dirname, "..", "bashdb_dir"));
+				config.pathZshdbLib = normalize(join(__dirname, "..", "zshdb_dir"));
 			}
 		}
 
@@ -111,7 +111,7 @@ class BashConfigurationProvider implements vscode.DebugConfigurationProvider {
 		if (!config.pathMkfifo) { config.pathMkfifo = "mkfifo" }
 		if (!config.pathPkill) { config.pathPkill = "pkill" }
 
-		// These variables can be undefined, as indicated in `?` (optional type) in bashDebug.ts:LaunchRequestArguments
+		// These variables can be undefined, as indicated in `?` (optional type) in zshDebug.ts:LaunchRequestArguments
 		// - config.showDebugOutput
 		// - config.trace
 		// - config.terminalKind

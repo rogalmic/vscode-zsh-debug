@@ -1,16 +1,16 @@
 In addition to the details for issue, please provide us *Executables* information and *Debug output* unless you have confidence that they don't help us.
 
 ## Executables
-Version of bash-debug: (can be checked in: ctrl+shift+X or command+shift+X -> INSTALLED: Bash Debug)
+Version of zsh-debug: (can be checked in: ctrl+shift+X or command+shift+X -> INSTALLED: Zsh Debug)
 
 Output of following commands (on windows, execute them in Command Prompt or PowerShell):
 
 ```
-where bash
+where zsh
 # if `code` not found on macOS, follow the instructions in:
 # https://code.visualstudio.com/docs/setup/mac
 code --version
-bash -c 'uname -a; for P in bash bashdb cat mkfifo pkill; do echo ---; which -a $P; command $P --version; done'
+zsh -c 'uname -a; for P in zsh zshdb cat mkfifo pkill; do echo ---; which -a $P; command $P --version; done'
 ```
 
 ## Debug output
@@ -22,9 +22,9 @@ Your `launch.json` may looks like:
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "bashdb",
+            "type": "zshdb",
             "request": "launch",
-            "name": "Bash Debug",
+            "name": "Zsh Debug",
             "program": "${workspaceFolder}/src/foo.sh",
             "showDebugOutput": true,
             "trace": true

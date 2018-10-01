@@ -17,7 +17,7 @@
 			"request": "launch",
 			"name": "Server",
 			"cwd": "${workspaceFolder}",
-			"program": "${workspaceFolder}/src/bashDebug.ts",
+			"program": "${workspaceFolder}/src/zshDebug.ts",
 			"args": [ "--server=4711" ],
 			"outFiles": [ "${workspaceFolder}/out/**/*.js" ]
 		},
