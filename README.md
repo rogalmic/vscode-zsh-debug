@@ -40,12 +40,13 @@ See https://code.visualstudio.com/docs/editor/debugging for general usage.
 For Windows users:
 - Install [Windows Subsystem for Linux](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)
 - Terminal has problems with spaces in paths when powershell is used, use [WSL zsh](https://github.com/Microsoft/vscode/issues/22317) instead
+- for now, debugging fails with `zsh:15: nice(5) failed: operation not permitted` (https://github.com/Microsoft/WSL/issues/1838)
 
 For macOS users:
 - Read [here](https://github.com/rogalmic/vscode-zsh-debug/wiki/macOS:-avoid-use-of--usr-local-bin-pkill) if your mac has `/usr/local/bin/pkill`.
 
 ## Dependencies
-1. `zsh`
+1. `zsh` version `4.3.6-dev-2` or later
 2. `cat`, `mkfifo`, `rm`, `pkill`
 
 ## Limitations and known problems
