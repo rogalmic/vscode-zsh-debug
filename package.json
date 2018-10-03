@@ -1,7 +1,7 @@
 {
   "name": "zsh-debug",
   "displayName": "Zsh Debug",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "preview": true,
   "publisher": "rogalmic",
   "description": "A debugger extension for zsh scripts (using zshdb).",
