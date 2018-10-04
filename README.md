@@ -39,7 +39,7 @@ See https://code.visualstudio.com/docs/editor/debugging for general usage.
 
 For Windows users:
 - Install [Windows Subsystem for Linux](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)
-- Terminal has problems with spaces in paths when powershell is used, use [WSL zsh](https://github.com/Microsoft/vscode/issues/22317) instead
+- Terminal has problems with spaces in paths when powershell is used, use [WSL shell](https://github.com/Microsoft/vscode/issues/22317) instead. For beta WSL please read [this](https://github.com/rogalmic/vscode-bash-debug/issues/93)
 - for now, debugging fails with `zsh:15: nice(5) failed: operation not permitted` (https://github.com/Microsoft/WSL/issues/1838)
 
 For macOS users:

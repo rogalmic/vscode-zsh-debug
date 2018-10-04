@@ -1,7 +1,7 @@
 import { ChildProcess, SpawnSyncReturns, spawnSync, spawn } from 'child_process';
 import { getWSLLauncherPath } from './handlePath';
 
-export function spawnZshScript(scriptCode: string, pathZsh: string, outputHandler?: (output: string) => void): ChildProcess{
+export function spawnZshScript(scriptCode: string, pathZsh: string, outputHandler?: (output: string, category?: string ) => void): ChildProcess{
 	const currentShell  = (process.platform === "win32") ? getWSLLauncherPath(false) : pathZsh;
 	const optionalZshPathArgument = (currentShell !== pathZsh) ? pathZsh : "";
 
@@ -9,15 +9,15 @@ export function spawnZshScript(scriptCode: string, pathZsh: string, outputHandle
 
 	if (outputHandler) {
 		spawnedProcess.on("error", (error) => {
-			outputHandler(`${error}`);
+			outputHandler(`${error}`, `console`);
 		});
 
 		spawnedProcess.stderr.on("data", (data) => {
-			outputHandler(`${data}`);
+			outputHandler(`${data}`, `stderr`);
 		});
 
 		spawnedProcess.stdout.on("data", (data) => {
-			outputHandler(`${data}`);
+			outputHandler(`${data}`, `stdout`);
 		});
 	}
 

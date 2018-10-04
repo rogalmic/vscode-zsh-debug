@@ -30,7 +30,7 @@ export interface LaunchRequestArguments extends DebugProtocol.LaunchRequestArgum
 	pathCat: string;
 	pathMkfifo: string;
 	pathPkill: string;
-	terminalKind?: 'integrated' | 'external';
+	terminalKind?: 'integrated' | 'external' | 'debugConsole';
 	showDebugOutput?: boolean;
 	/** enable logging the Debug Adapter Protocol */
 	trace?: boolean;
@@ -152,24 +152,36 @@ export class ZshDebugSession extends LoggingDebugSession {
 
 		this.proxyProcess.stdin.write(`examine Debug environment: zsh_ver=$ZSH_VERSION, zshdb_ver=$_Dbg_release, program=$0, args=$*\nprint "$PPID"\nhandle INT stop\nprint '${ZshDebugSession.END_MARKER}'\n`);
 
-		const currentShell  = (process.platform === "win32") ? getWSLLauncherPath(true) : args.pathZsh;
-		const optionalZshPathArgument = (currentShell !== args.pathZsh) ? args.pathZsh : "";
-		const termArgs: DebugProtocol.RunInTerminalRequestArguments = {
-			kind: this.launchArgs.terminalKind,
-			title: "Zsh Debug Console",
-			cwd: ".",
-			args: [currentShell, optionalZshPathArgument, `-c`,
-			`cd "${args.cwdEffective}"; while [[ ! -p "${fifo_path}" ]]; do sleep 0.25; done
-			"${args.pathZsh}" -f "${args.pathZshdb}" --quiet --tty "${fifo_path}" --tty_in "${fifo_path}_in" --library "${args.pathZshdbLib}" -- "${args.programEffective}" ${args.args.map(e => `"` + e.replace(`"`,`\\\"`) + `"`).join(` `)}`
-			.replace("\r", "").replace("\n", "; ")
-			].filter(arg => arg !== ""),
-		};
+		if (this.launchArgs.terminalKind === "debugConsole")
+		{
+			spawnZshScript(
+				`cd "${args.cwdEffective}"; while [[ ! -p "${fifo_path}" ]]; do sleep 0.25; done
+				"${args.pathZsh}" "${args.pathZshdb}" --quiet --tty "${fifo_path}" --tty_in "${fifo_path}_in" --library "${args.pathZshdbLib}" -- "${args.programEffective}" ${args.args.map(e => `"` + e.replace(`"`,`\\\"`) + `"`).join(` `)}`
+				.replace("\r", "").replace("\n", "; "),
+				this.launchArgs.pathZsh,
+				(data, category)=> this.sendEvent(new OutputEvent(`${data}`, category)));
+		}
+		else
+		{
+			const currentShell  = (process.platform === "win32") ? getWSLLauncherPath(true) : args.pathZsh;
+			const optionalZshPathArgument = (currentShell !== args.pathZsh) ? args.pathZsh : "";
+			const termArgs: DebugProtocol.RunInTerminalRequestArguments = {
+				kind: this.launchArgs.terminalKind,
+				title: "Zsh Debug Console",
+				cwd: ".",
+				args: [currentShell, optionalZshPathArgument, `-c`,
+				`cd "${args.cwdEffective}"; while [[ ! -p "${fifo_path}" ]]; do sleep 0.25; done
+				"${args.pathZsh}" -f "${args.pathZshdb}" --quiet --tty "${fifo_path}" --tty_in "${fifo_path}_in" --library "${args.pathZshdbLib}" -- "${args.programEffective}" ${args.args.map(e => `"` + e.replace(`"`,`\\\"`) + `"`).join(` `)}`
+				.replace("\r", "").replace("\n", "; ")
+				].filter(arg => arg !== ""),
+			};
 
-		this.runInTerminalRequest(termArgs, 10000, (response) =>{
-			if (!response.success) {
-				this.sendEvent(new OutputEvent(`${JSON.stringify(response)}`, 'console'));
-			}
-		} );
+			this.runInTerminalRequest(termArgs, 10000, (response) =>{
+				if (!response.success) {
+					this.sendEvent(new OutputEvent(`${JSON.stringify(response)}`, 'console'));
+				}
+			} );
+		}
 
 		this.proxyProcess.on("error", (error) => {
 			this.sendEvent(new OutputEvent(`${error}`, 'console'));
