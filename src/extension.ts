@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { WorkspaceFolder, DebugConfiguration, ProviderResult, CancellationToken } from 'vscode';
 import { expandPath, getWSLPath } from './handlePath';
 import { normalize, join } from 'path';
+import * as which from 'npm-which';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -85,10 +86,11 @@ class ZshConfigurationProvider implements vscode.DebugConfigurationProvider {
 		}
 
 		// Fill non-"required" attributes with default values to prevent zshdb (or other programs) from panic
-		if (!config.args) { config.args = [] }
-		if (!config.cwd) { config.cwd = folder.uri.fsPath }
+		if (!config.args) { config.args = []; }
+		if (!config.env) { config.env = {}; }
+		if (!config.cwd) { config.cwd = folder.uri.fsPath; }
 		if (!config.pathZsh) {
-			config.pathZsh = "zsh"
+			config.pathZsh = "zsh";
 		}
 		if (!config.pathZshdb) {
 			if (process.platform === "win32") {
@@ -107,9 +109,24 @@ class ZshConfigurationProvider implements vscode.DebugConfigurationProvider {
 			}
 		}
 
-		if (!config.pathCat) { config.pathCat = "cat" }
-		if (!config.pathMkfifo) { config.pathMkfifo = "mkfifo" }
-		if (!config.pathPkill) { config.pathPkill = "pkill" }
+		if (!config.pathCat) { config.pathCat = "cat"; }
+		if (!config.pathMkfifo) { config.pathMkfifo = "mkfifo"; }
+		if (!config.pathPkill) {
+
+			if ( process.platform === "darwin" ) {
+				const pathPkill = which(__dirname).sync('pkill');
+				if (pathPkill === "/usr/local/bin/pkill") {
+					vscode.window.showInformationMessage(`Using /usr/bin/pkill instead of /usr/local/bin/pkill`);
+					config.pathPkill = "/usr/bin/pkill";
+				}
+				else {
+					config.pathPkill = "pkill";
+				}
+			}
+			else {
+				config.pathPkill = "pkill";
+			}
+		}
 
 		// These variables can be undefined, as indicated in `?` (optional type) in zshDebug.ts:LaunchRequestArguments
 		// - config.showDebugOutput

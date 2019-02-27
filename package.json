@@ -14,7 +14,7 @@
     "multi-root ready"
   ],
   "engines": {
-    "vscode": "^1.29.0",
+    "vscode": "^1.31.0",
     "node": "^10.2.0"
   },
   "icon": "images/zsh-debug-icon.png",
@@ -47,22 +47,22 @@
     }
   ],
   "dependencies": {
-    "vscode-debugadapter": "1.32.1",
-    "vscode-debugprotocol": "1.32.0",
     "child-process": "^1.0.2",
-    "npm-which": "^3.0.1"
+    "npm-which": "^3.0.1",
+    "vscode-debugadapter": "1.33.0",
+    "vscode-debugprotocol": "1.33.0"
   },
   "devDependencies": {
-    "@types/mocha": "5.2.5",
-    "@types/node": "10.11.3",
+    "@types/mocha": "5.2.6",
+    "@types/node": "10.12.27",
     "jsdoctest": "1.7.1",
-    "mocha": "5.2.0",
-    "standard-version": "^4.4.0",
-    "tslint": "5.11.0",
-    "typescript": "3.1.1",
-    "vsce": "1.51.1",
-    "vscode": "1.1.21",
-    "vscode-debugadapter-testsupport": "1.32.0"
+    "mocha": "6.0.1",
+    "standard-version": "^5.0.0",
+    "tslint": "5.13.0",
+    "typescript": "3.3.3333",
+    "vsce": "1.57.1",
+    "vscode": "1.1.30",
+    "vscode-debugadapter-testsupport": "1.33.0"
   },
   "scripts": {
     "prepublish": "tsc -p ./src",
