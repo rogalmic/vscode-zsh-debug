@@ -153,7 +153,7 @@ export class ZshDebugSession extends LoggingDebugSession {
 			`while [[ ! -p "${fifo_path}" ]]; do sleep 0.25; done`,
 			`"${args.pathZsh}" "${args.pathZshdb}" --quiet --tty "${fifo_path}" --tty_in "${fifo_path}_in" --library "${args.pathZshdbLib}" -- "${args.programEffective}" ${args.args.map(e => `"` + e.replace(`"`, `\\\"`) + `"`).join(` `)}`);
 
-		if (this.launchArgs.terminalKind === "debugConsole") {
+		if (this.launchArgs.terminalKind === "debugConsole" || this.launchArgs.terminalKind === undefined) {
 			spawnZshScript(
 				command,
 				this.launchArgs.pathZsh,

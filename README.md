@@ -50,5 +50,6 @@ For macOS users:
 2. `cat`, `mkfifo`, `rm`, `pkill`
 
 ## Limitations and known problems
+* Use `terminalKind`@`launch.json` set to `integrated` or `external` for interactive scripts (using stdin)
 * Currently debugger stops at first command
 * `$0` variable shows path to zshdb
