@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 
-## [0.1.1](https://github.com/rogalmic/vscode-zsh-debug/compare/v0.1.0...v0.1.1) (2019-02-27)
+### [0.1.1](https://github.com/rogalmic/vscode-zsh-debug/compare/v0.1.0...v0.1.1) (2019-02-27)
 
 
 ### Features
@@ -26,8 +26,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 
-<a name="0.1.0"></a>
-# 0.1.0 (2018-10-03)
+## 0.1.0 (2018-10-03)
 
 
 ### Features
