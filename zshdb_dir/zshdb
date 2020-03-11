@@ -98,7 +98,7 @@ if (( ${#_Dbg_script_args[@]} > 0 )) ; then
     _Dbg_script_file="${_Dbg_script_args[0]}"
      shift _Dbg_script_args
 elif [[ -z $_Dbg_EXECUTION_STRING ]] ; then
-    echo >&2 "${_Dbg_pname}: need to give a script to debug or use the -c option."
+    echo "${_Dbg_pname}: need to give a script to debug or use the -c option." >&2
     exit 1
 fi
 
