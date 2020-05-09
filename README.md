@@ -43,7 +43,7 @@ For Windows users:
 - for now, debugging fails with `zsh:15: nice(5) failed: operation not permitted` (https://github.com/Microsoft/WSL/issues/1838)
 
 For macOS users:
-- Read [here](https://github.com/rogalmic/vscode-zsh-debug/wiki/macOS:-avoid-use-of--usr-local-bin-pkill) if your mac has `/usr/local/bin/pkill`.
+- Read [here](https://github.com/rogalmic/vscode-bash-debug/wiki/macOS:-avoid-use-of--usr-local-bin-pkill) if your mac has `/usr/local/bin/pkill`.
 
 ## Dependencies
 1. `zsh` version `4.3.6-dev-2` or later
