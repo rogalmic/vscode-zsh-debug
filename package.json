@@ -56,7 +56,7 @@
     "@types/mocha": "5.2.7",
     "@types/node": "10.14.17",
     "jsdoctest": "1.7.1",
-    "mocha": "6.2.0",
+    "mocha": "10.2.0",
     "standard-version": "^7.0.0",
     "tslint": "5.19.0",
     "typescript": "3.6.2",
